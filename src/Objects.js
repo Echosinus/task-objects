@@ -1,3 +1,5 @@
+import { ObjectFlags } from 'typescript';
+
 /*
   В функцию personUpdate() приходят данные в виде объекта, содержащую некую информацию о человеке.
   Если этот человек является женщиной (свойство gender содержит значение 'female'), то из этого объекта
@@ -8,6 +10,14 @@
   Объект после манипуляций следует вернуть в качестве результата работы функции.
 */
 export function personUpdate(data) {
+    if (data.gender == 'female') {
+        delete data.age;
+    } else {
+        if (!data.hasOwnProperty('income')) {
+            data.income = 100000;
+        }
+    }
+    return data;
 }
 
 /*
@@ -15,6 +25,12 @@ export function personUpdate(data) {
   Верните список названий этих полей в алфавитном порядке в виде массива строк.
 */
 export function objectFieldsList(obj1, obj2, obj3) {
+    let field1 = Object.keys(obj1);
+    let field2 = Object.keys(obj2);
+    let field3 = Object.keys(obj3);
+    let arr = [...field1, ...field2, ...field3];
+    arr.sort();
+    return arr;
 }
 
 /*
@@ -23,4 +39,23 @@ export function objectFieldsList(obj1, obj2, obj3) {
   Количество клонов - count.
 */
 export function objectClone(obj, count) {
+    let arr = [];
+    for (let i = 0; i < count; i++) {
+        let Obj = clone(obj);
+        Obj.id = i;
+        arr[i] = Obj;
+    }
+    return arr;
+
+    function clone(obj) {
+        const Obj = {};
+        for (let key in obj) {
+            if (obj[key] && typeof obj[key] === 'object') {
+                Obj[key] = clone(obj[key]);
+                continue;
+            }
+            Obj[key] = obj[key];
+        }
+        return Obj;
+    }
 }
